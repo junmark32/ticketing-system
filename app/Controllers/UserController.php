@@ -4,6 +4,14 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\UsersModel;
+use App\Models\TicketsModel;
+use App\Models\EventsModel;
+use App\Models\TicketTypesModel;
+use App\Models\QRcodeModel;
+use App\Models\TicketpurchasesModel;
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 class UserController extends BaseController
 {
     public function index()
@@ -115,30 +123,37 @@ class UserController extends BaseController
     {
         // Load the model
         $model = new UsersModel();
-
+    
         // Get username and password from the form or request
         $username = $this->request->getVar('username');
         $password = $this->request->getVar('password');
-
+    
         // Check if the user exists
         $user = $model->where('Username', $username)->first();
-
+    
         if ($user) {
             // Verify the password
             if (password_verify($password, $user['PasswordHash'])) {
                 // Password is correct, set session and redirect to dashboard or any desired page
                 $session = session();
                 $session->set('isLoggedIn', true);
-                $session->set('userID', $user['UserID']);
-                // Optionally, you can set more session data like user type, name, etc.
-
+    
+                // Set user data array
+                $userData = [
+                    'UserID' => $user['UserID'],
+                    'Username' => $user['Username'],
+                    'UserType' => $user['UserType'],
+                    // Add more user data as needed
+                ];
+                $session->set('user_data', $userData);
+    
                 // Redirect to appropriate dashboard based on UserType
                 switch ($user['UserType']) {
                     case 'admin':
                         return redirect()->to('/admin_dashboard');
                         break;
                     case 'student':
-                        return redirect()->to('/student_dashboard');
+                        return redirect()->to('/student/events');
                         break;
                     case 'alumni':
                         return redirect()->to('/alumni_dashboard');
@@ -156,7 +171,252 @@ class UserController extends BaseController
             return redirect()->back()->with('error', 'User does not exist.');
         }
     }
+    
  
+    public function viewSessionData()
+{
+    // Start session
+    $session = session();
+
+    // Check if user is logged in
+    if ($session->get('isLoggedIn')) {
+        // Get user data from session
+        $userData = $session->get('user_data');
+
+        // Check if user data exists
+        if ($userData) {
+            // Display user data
+            echo "User ID: " . $userData['UserID'] . "<br>";
+            echo "Username: " . $userData['Username'] . "<br>";
+            echo "UserType: " . $userData['UserType'] . "<br>";
+            // Display more user data as needed
+        } else {
+            // User data not found
+            echo "User data not found.";
+        }
+    } else {
+        // User is not logged in
+        echo "User is not logged in.";
+    }
+}
+
+
+public function stud_displayEvents()
+{
+    // Start session
+    $session = session();
+
+    // Get user type from session
+    $userType = $session->get('user_data')['UserType'];
+
+    $eventModel = new EventsModel();
+    $ticketModel = new TicketsModel();
+    $ticketTypeModel = new TicketTypesModel();
+
+    $events = $eventModel->findAll();
+
+    foreach ($events as &$event) {
+        // Get ticket types for each event
+        $event['ticket_types'] = $ticketModel->where('EventID', $event['EventID'])->findAll();
+
+        // Add ticket type details to each ticket type
+        foreach ($event['ticket_types'] as $key => &$ticket_type) {
+            $ticketTypeDetails = $ticketTypeModel->find($ticket_type['TicketTypeID']);
+            $ticket_type['TicketType'] = $ticketTypeDetails['TicketType'];
+            $ticket_type['Price'] = $ticketTypeDetails['Price'];
+            $ticket_type['Quantity'] = $ticketTypeDetails['Quantity'];
+
+            // Filter ticket types based on user type
+            if ($userType === 'student') {
+                // If user is a student, only display VIP and Student tickets
+                if ($ticket_type['TicketType'] !== 'VIP' && $ticket_type['TicketType'] !== 'Student') {
+                    unset($event['ticket_types'][$key]); // Remove ticket type
+                }
+            }
+        }
+    }
+
+    // Load the view and pass the data to it
+    return view('user/Student_Display_Events', ['events' => $events]);
+}
+
+
+public function showAvailableTickets($eventID)
+{
+    // Start session
+    $session = session();
+
+    // Get user data from session
+    $userData = $session->get('user_data');
+
+    // Check if user data exists and if UserType is set
+    $userType = null;
+    if (!empty($userData) && isset($userData['UserType'])) {
+        $userType = $userData['UserType'];
+    } else {
+        // If UserType is not set or user data is empty, handle accordingly (redirect or show error)
+        return redirect()->to('/error_page')->with('error', 'User data not found.');
+    }
+
+    $eventModel = new EventsModel();
+    $ticketModel = new TicketsModel();
+    $ticketTypeModel = new TicketTypesModel();
+
+    // Find the event by EventID
+    $event = $eventModel->find($eventID);
+
+    if (!$event) {
+        // Event not found, handle accordingly (redirect or show error)
+        return redirect()->to('/error_page')->with('error', 'Event not found.');
+    }
+
+    // Get ticket types for the specified event
+    $ticket_types = $ticketModel->where('EventID', $eventID)->findAll();
+
+    // Filter ticket types based on user type
+    $filtered_ticket_types = [];
+    foreach ($ticket_types as $ticket_type) {
+        $ticketTypeDetails = $ticketTypeModel->find($ticket_type['TicketTypeID']);
+        if ($userType === 'student') {
+            // If user is a student, include only VIP and Student tickets
+            if ($ticketTypeDetails['TicketType'] === 'VIP' || $ticketTypeDetails['TicketType'] === 'Student') {
+                $filtered_ticket_types[] = [
+                    'TicketTypeID' => $ticketTypeDetails['TicketTypeID'], // Include TicketTypeID
+                    'TicketType' => $ticketTypeDetails['TicketType'],
+                    'Price' => $ticketTypeDetails['Price'],
+                    'Quantity' => $ticketTypeDetails['Quantity']
+                ];
+            }
+        } else {
+            // If user is not a student, include all ticket types
+            $filtered_ticket_types[] = [
+                'TicketTypeID' => $ticketTypeDetails['TicketTypeID'], // Include TicketTypeID
+                'TicketType' => $ticketTypeDetails['TicketType'],
+                'Price' => $ticketTypeDetails['Price'],
+                'Quantity' => $ticketTypeDetails['Quantity']
+            ];
+        }
+    }
+
+    $event['ticket_types'] = $filtered_ticket_types;
+
+    return view('user/View_Ticket_Event', ['event' => $event]);
+}
+
+
+public function buyTicket($ticketTypeID)
+{
+    // Fetch event details based on the ticket type ID
+    $ticketTypeModel = new TicketTypesModel();
+    $ticketTypeDetails = $ticketTypeModel->find($ticketTypeID);
+
+    // Fetch event details based on the ticket type's associated event ID
+    $eventModel = new EventsModel();
+    $eventDetails = $eventModel->find($ticketTypeDetails['EventID']);
+
+    // Pass both ticket type and event details to the view
+    return view('user/Buy_Ticket_Event', [
+        'ticketTypeID' => $ticketTypeID,
+        'event' => $eventDetails,
+        'ticketType' => $ticketTypeDetails
+    ]);
+}
+
+public function purchaseTicket($ticketTypeID)
+{
+    // Start session
+    $session = session();
+
+    // Get user data from session
+    $userData = $session->get('user_data');
+
+    // Check if user data exists and if UserID is set
+    $userID = null;
+    if (!empty($userData) && isset($userData['UserID'])) {
+        $userID = $userData['UserID'];
+    } else {
+        // If UserID is not set or user data is empty, handle accordingly (redirect or show error)
+        return redirect()->to('/error_page')->with('error', 'User data not found.');
+    }
+
+    // Get the ticket type details
+    $ticketTypeModel = new TicketTypesModel();
+    $ticketType = $ticketTypeModel->find($ticketTypeID);
+
+    if (!$ticketType) {
+        // Ticket type not found, handle accordingly (redirect or show error)
+        return redirect()->to('/error_page')->with('error', 'Ticket type not found.');
+    }
+
+    // Check if tickets are available
+    if ($ticketType['Quantity'] <= 0) {
+        // Tickets are sold out, handle accordingly (redirect or show error)
+        return redirect()->to('/error_page')->with('error', 'Tickets are sold out.');
+    }
+
+    $firstName = $this->request->getVar('first_name');
+    $lastName = $this->request->getVar('last_name');
+    $email = $this->request->getVar('email');
+    $phone = $this->request->getVar('phone');
+    $refNumber = $this->request->getVar('reference');
+    $imageFile = $this->request->getFile('imageFile');
+
+    // Validate reference number
+    if (strlen($refNumber) !== 13) {
+        // Reference number is not 13 digits, redirect back with error message
+        return redirect()->back()->withInput()->with('error', 'Reference number must be 13 digits.');
+    }
+
+    // Validate uploaded image
+    if (!$imageFile->isValid()) {
+        // Image upload failed, redirect back with error message
+        return redirect()->back()->withInput()->with('error', 'Image upload failed.');
+    }
+
+    // Handle file upload
+    if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
+        $newName = $imageFile->getRandomName();
+        $imageFile->move(ROOTPATH . 'public/uploads/payments', $newName);
+        $imageUrl = '/uploads/payments' . $newName;
+    } else {
+        return redirect()->back()->withInput()->with('error', 'Image upload failed.');
+    }
+
+    // Generate a random alphanumeric ticket ID with 9 digits
+    $ticketID = $ticketType['TicketType'].'_'. substr(str_shuffle(str_repeat('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 9)), 0, 9);
+
+    // Create a new TicketPurchaseModel instance
+    $ticketPurchaseModel = new TicketPurchasesModel();
+
+    // Prepare the ticket purchase data
+    $ticketPurchaseData = [
+        'UserID' => $userID,
+        'TicketID' => $ticketID,
+        'TicketTypeID' => $ticketTypeID,
+        'EventID' => $ticketType['EventID'], // Assuming EventID is associated with TicketType
+        'FirstName' => $firstName,
+        'LastName' => $lastName,
+        'Email' => $email,
+        'Phone' => $phone,
+        'Ref_Number' => $refNumber, 
+        'PaymentProof' => $imageUrl,
+        'PurchaseDate' => date('Y-m-d H:i:s'), // Current date and time
+        'Quantity' => 1, // Purchase one ticket at a time
+        'Status' => 'Pending' // Set initial status as Pending, can be updated later
+    ];
+
+    // Insert the ticket purchase data into the database
+    $ticketPurchaseModel->insert($ticketPurchaseData);
+
+    // Update the ticket quantity
+    $newQuantity = $ticketType['Quantity'] - 1;
+    $ticketTypeModel->update($ticketTypeID, ['Quantity' => $newQuantity]);
+
+    // Redirect to a success page or display a success message
+    return redirect()->to('/student/events')->with('success', 'Ticket purchased successfully.');
+}
+
+
 
 
 

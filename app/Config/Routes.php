@@ -16,6 +16,13 @@ $routes->match(['post','get'],'/registerAlumni', 'UserController::registerAlumni
 $routes->get('/Outsider/Register', 'UserController::outsiderRegister');
 $routes->match(['post','get'],'/registerOutsider', 'UserController::registerOutsider');
 
+$routes->match(['post','get'],'/student/events', 'UserController::stud_displayEvents');
+$routes->match(['post','get'],'/student/events/show-event-details/(:num)', 'UserController::showAvailableTickets/$1');
+$routes->match(['post','get'],'/student/events/ticket/buy/(:num)', 'UserController::buyTicket/$1'); 
+$routes->match(['post','get'],'/student/events/ticket/purchase/(:num)', 'UserController::purchaseTicket/$1');   
+
+
+$routes->match(['post','get'],'/session', 'UserController::viewSessionData');
 //admin
 $routes->get('/admin/dashboard', 'AdminController::adminDB');
 $routes->get('/admin/dashboard/add_event', 'AdminController::addEvent');

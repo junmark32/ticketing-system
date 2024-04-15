@@ -12,7 +12,7 @@ class TicketpurchasesModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['UserID', 'TicketID', 'PurchaseDate'];
+    protected $allowedFields    = ['UserID', 'TicketID', 'TicketTypeID', 'EventID', 'FirstName', 'LastName', 'Email', 'Phone', 'Ref_Number', 'PaymentProof', 'PurchaseDate', 'Quantity', 'Status'];
 
     // Dates
     protected $useTimestamps = false;
