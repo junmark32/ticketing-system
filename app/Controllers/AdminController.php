@@ -7,6 +7,10 @@ use App\Controllers\BaseController;
 use App\Models\EventsModel;
 use App\Models\TicketTypesModel;
 use App\Models\TicketsModel;
+use App\Models\UsersModel;
+use App\Models\TicketpurchasesModel;
+
+
 
 class AdminController extends BaseController
 {
@@ -230,6 +234,95 @@ foreach ($ticketTypeArray as $key => $ticketType) {
     return redirect()->to('/admin/events');
 }
 
-    
+
+public function showAvailTickets()
+{
+    $userModel = new UsersModel();
+    $ticketPurchasesModel = new TicketPurchasesModel();
+    $ticketTypeModel = new TicketTypesModel();
+    $eventModel = new EventsModel();
+
+    $userData = $userModel->select('UserID, Username, UserType, SchoolID, AlumniCardNumber, GeneratedNumber')
+        ->findAll(); // Fetch all users
+
+    $data = [];
+
+    foreach ($userData as $user) {
+        $ticketInfo = $ticketPurchasesModel->select('ticketpurchases.PurchaseID, ticketpurchases.TicketID, ticketpurchases.TicketTypeID as TicketTypeID, ticketpurchases.EventID, ticketpurchases.FirstName, ticketpurchases.LastName, ticketpurchases.Email, ticketpurchases.Phone, ticketpurchases.Ref_Number, ticketpurchases.PaymentProof, ticketpurchases.PurchaseDate, ticketpurchases.Quantity, ticketpurchases.Status')
+            ->where('UserID', $user['UserID'])
+            ->join('tickettypes', 'tickettypes.TicketTypeID = ticketpurchases.TicketTypeID')
+            ->join('events', 'events.EventID = ticketpurchases.EventID')
+            ->findAll(); // Fetch ticket information for each user
+
+        foreach ($ticketInfo as &$ticket) {
+            // if ($ticket['Status'] == 'Pending') {
+                $ticketType = $ticketTypeModel->select('TicketType, Price, Quantity')
+                    ->where('TicketTypeID', $ticket['TicketTypeID'])
+                    ->first(); // Fetch ticket type details
+
+                $eventName = $eventModel->select('EventName')
+                    ->where('EventID', $ticket['EventID'])
+                    ->first(); // Fetch event name
+
+                $ticket['TicketType'] = $ticketType['TicketType'];
+                $ticket['Price'] = $ticketType['Price'];
+                $ticket['EventName'] = $eventName['EventName'];
+            // }
+        }
+
+        $user['TicketInfo'] = $ticketInfo;
+        $data[] = $user;
+    }
+
+      // Add var_dump to inspect the data
+    //   var_dump($data);
+    return view('admin/Display_Avail_Tickets', ['userData' => $data]);
+}
+
+// Function to update ticket status to "Approved"
+public function approveTicket($purchaseID)
+{
+    // Load the TicketPurchasesModel
+    $ticketModel = new TicketPurchasesModel();
+
+    // Find the ticket by PurchaseID
+    $ticket = $ticketModel->find($purchaseID);
+
+    // Check if the ticket exists
+    if (!$ticket) {
+        // Ticket not found, redirect back with an error message
+        return redirect()->back()->with('error', 'Ticket not found.');
+    }
+
+    // Update the ticket status to "Approved"
+    $data = ['Status' => 'Approved'];
+    $ticketModel->update($purchaseID, $data);
+
+    // Redirect to a specific route after updating the ticket status
+    return redirect()->to('/admin/avail-tickets')->with('success', 'Ticket approved successfully.');
+}
+
+// Function to update ticket status to "Declined"
+public function declineTicket($purchaseID)
+{
+    // Load the TicketPurchasesModel
+    $ticketModel = new TicketPurchasesModel();
+
+    // Find the ticket by PurchaseID
+    $ticket = $ticketModel->find($purchaseID);
+
+    // Check if the ticket exists
+    if (!$ticket) {
+        // Ticket not found, redirect back with an error message
+        return redirect()->back()->with('error', 'Ticket not found.');
+    }
+
+    // Update the ticket status to "Declined"
+    $data = ['Status' => 'Declined'];
+    $ticketModel->update($purchaseID, $data);
+
+    // Redirect to a specific route after updating the ticket status
+    return redirect()->to('/admin/avail-tickets')->with('success', 'Ticket declined successfully.');
+}
 
 }

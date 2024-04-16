@@ -343,6 +343,15 @@ public function purchaseTicket($ticketTypeID)
     $ticketTypeModel = new TicketTypesModel();
     $ticketType = $ticketTypeModel->find($ticketTypeID);
 
+    // Get the event details based on TicketTypeID
+    $eventsModel = new EventsModel();
+    $event = $eventsModel->find($ticketType['EventID']);
+
+    // Get the ticket purchsedetails based on TicketTypeID
+    $ticketpurchasesModel = new TicketPurchasesModel();
+    $ticketPurchase = $ticketpurchasesModel->where('TicketTypeID', $ticketTypeID)->first();
+    
+
     if (!$ticketType) {
         // Ticket type not found, handle accordingly (redirect or show error)
         return redirect()->to('/error_page')->with('error', 'Ticket type not found.');
@@ -377,7 +386,7 @@ public function purchaseTicket($ticketTypeID)
     if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
         $newName = $imageFile->getRandomName();
         $imageFile->move(ROOTPATH . 'public/uploads/payments', $newName);
-        $imageUrl = '/uploads/payments' . $newName;
+        $imageUrl = '/uploads/payments/' . $newName;
     } else {
         return redirect()->back()->withInput()->with('error', 'Image upload failed.');
     }
@@ -411,6 +420,44 @@ public function purchaseTicket($ticketTypeID)
     // Update the ticket quantity
     $newQuantity = $ticketType['Quantity'] - 1;
     $ticketTypeModel->update($ticketTypeID, ['Quantity' => $newQuantity]);
+
+    //
+     // Send email notification
+     $mail = new PHPMailer(true);
+     try {
+         //Server settings
+         $mail->isSMTP();
+         $mail->Host = 'smtp.gmail.com'; // Your SMTP server
+         $mail->SMTPAuth = true;
+         $mail->Username = 'adonaieyecare@gmail.com'; // Your SMTP username
+         $mail->Password = 'suxqojbojluggurs'; // Your SMTP password
+         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+         $mail->Port = 587; // TCP port to connect to, use 465 for `PHPMailer::ENCRYPTION_SMTPS` above
+ 
+         //Recipients
+         $mail->setFrom('adonaieyecare@gmail.com', 'Adonai-EyeCare');
+         $mail->addAddress($email); // Add a recipient
+ 
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Ticket Purchase Confirmation';
+        $mail->Body = 'Dear ' . $firstName . ',
+                        <br>
+                        <br>
+                        Your ticket ' . $ticketType['TicketType'] . ' for ' . $event['EventName'] .
+                        ' purchase is pending and awaiting approval from the admin.
+                        <br>
+                        <br>
+                        Date Avail: ' . $ticketPurchase['PurchaseDate'] . ' 
+                        <br>
+                        <br>
+                        Thank you for your purchase.';
+
+         $mail->send();
+         echo 'Email has been sent';
+     } catch (Exception $e) {
+         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+     }
 
     // Redirect to a success page or display a success message
     return redirect()->to('/student/events')->with('success', 'Ticket purchased successfully.');

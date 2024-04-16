@@ -30,3 +30,7 @@ $routes->match(['post','get'],'/admin/insertEventWithTickets', 'AdminController:
 $routes->match(['post','get'],'/admin/events', 'AdminController::displayEvents');
 $routes->get('/admin/events/edit/(:num)', 'AdminController::updateEvent/$1');
 $routes->post('/admin/events/update/(:num)', 'AdminController::updateEventWithTickets/$1');
+$routes->get('/admin/avail-tickets', 'AdminController::showAvailTickets');
+$routes->match(['post', 'get'], '/admin/avail-tickets/approved/(:num)', 'AdminController::approveTicket/$1');
+$routes->match(['post', 'get'], '/admin/avail-tickets/declined/(:num)', 'AdminController::declineTicket/$1');
+
