@@ -12,7 +12,7 @@ class QRcodeModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['TicketID', 'QRCode', 'GeneratedNumber'];
+    protected $allowedFields    = ['PurchaseID', 'QRCode', 'GeneratedNumber'];
 
     // Dates
     protected $useTimestamps = false;

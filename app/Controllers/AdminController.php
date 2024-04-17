@@ -9,6 +9,15 @@ use App\Models\TicketTypesModel;
 use App\Models\TicketsModel;
 use App\Models\UsersModel;
 use App\Models\TicketpurchasesModel;
+use App\Models\QRcodeModel;
+
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
+
+use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 
 
@@ -282,11 +291,19 @@ public function showAvailTickets()
 // Function to update ticket status to "Approved"
 public function approveTicket($purchaseID)
 {
-    // Load the TicketPurchasesModel
+    // Load the TicketPurchasesModel and QrcodeModel
     $ticketModel = new TicketPurchasesModel();
+    $eventModel = new EventsModel();
+    $qrcodeModel = new QrcodeModel();
 
     // Find the ticket by PurchaseID
     $ticket = $ticketModel->find($purchaseID);
+    // Retrieve the EventID from the ticket data
+    $eventID = $ticket['EventID'];
+
+    // Find the event by ID
+    $event = $eventModel->find($eventID);
+
 
     // Check if the ticket exists
     if (!$ticket) {
@@ -298,9 +315,134 @@ public function approveTicket($purchaseID)
     $data = ['Status' => 'Approved'];
     $ticketModel->update($purchaseID, $data);
 
-    // Redirect to a specific route after updating the ticket status
-    return redirect()->to('/admin/avail-tickets')->with('success', 'Ticket approved successfully.');
+    // Generate a unique number for the QR code
+    $generatedNumber = uniqid();
+
+    // Generate the QR code data (you can customize this data according to your requirements)
+    $qrCodeData = json_encode([
+        'PurchaseID' => $purchaseID,
+        'GeneratedNumber' => $generatedNumber,
+    ]);
+
+    try {
+        // Create QR code options
+        $options = new QROptions([
+            'outputType' => QRCode::OUTPUT_IMAGE_PNG,
+            'eccLevel' => QRCode::ECC_H,
+            'imageBase64' => false,
+        ]);
+
+        // Create a QRCode instance
+        $qrcode = new QRCode($options);
+
+        // Generate the QR code image
+        $qrCodeImage = $qrcode->render($qrCodeData);
+
+        // Define the file path and name for saving the QR code image as PNG
+        $directory = 'uploads/qrcodes';
+        $pngName = 'qrcode_' . $purchaseID . '.png';
+        $pngFilePath = ROOTPATH . 'public/' . $directory . '/' . $pngName;
+
+        // Save the QR code image to file
+        file_put_contents($pngFilePath, $qrCodeImage);
+
+        // Save the QR code file path and generated number to the QrcodeModel
+        $qrcodeModel->insert([
+            'PurchaseID' => $purchaseID,
+            'QRCode' => '/' . $directory . '/' . $pngName,
+            'GeneratedNumber' => $generatedNumber,
+        ]);
+
+        //
+        // Send the QR code image via email
+        $mailer = new PHPMailer(true);
+        $mailer->isSMTP();
+        // Configure your SMTP settings here
+        $mailer->Host = 'smtp.gmail.com';
+        $mailer->SMTPAuth = true;
+        $mailer->Username = 'adonaieyecare@gmail.com';
+        $mailer->Password = 'suxqojbojluggurs';
+        $mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mailer->Port = 587;
+
+        // Set sender and recipient
+        $mailer->setFrom('adonaieyecare@gmail.com', 'Adonai-EyeCare');
+        $mailer->addAddress($ticket['Email'], $ticket['FirstName'] . ' ' . $ticket['LastName']);
+
+        // Attach the QR code image to the email
+        $mailer->addAttachment($pngFilePath, 'qrcode.png');
+         // Attach the QR code image to the email and get the CID
+         $cid = basename($pngFilePath);
+         $mailer->addEmbeddedImage($pngFilePath, $cid, 'qrcode.png');
+
+        // Set email subject
+        $mailer->Subject = 'QR Code for Ticket Purchase';
+
+
+        // Set email body with HTML template
+       // Set email body with HTML template
+        $htmlBody = "
+                <html>
+                <head>
+                    <title>QR Code for Ticket Purchase</title>
+                    <style>
+                        .ticket {
+                            width: 400px;
+                            background-color: #f5f5f5;
+                            border-radius: 10px;
+                            padding: 20px;
+                            margin: 0 auto;
+                        }
+                        .ticket-header {
+                            text-align: center;
+                        }
+                        .ticket-content {
+                            margin-top: 20px;
+                        }
+                        .qr-code {
+                            text-align: center;
+                            margin-top: 20px;
+                        }
+                        .qr-code img {
+                            width: 200px;
+                            height: auto;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class='ticket'>
+                        <div class='ticket-header'>
+                            <h2>Your Ticket</h2>
+                        </div>
+                        <div class='ticket-content'>
+                            <p>Event: {$event['EventName']}</p>
+                            <p>Date: {$event['EventDate']}</p>
+                            <p>Location: {$event['EventLocation']}</p>
+                            <p>Name: {$ticket['FirstName']} {$ticket['LastName']}</p>
+                            <p>Email: {$ticket['Email']}</p>
+                        </div>
+                        <div class='qr-code'>
+                            <img src='cid:{$cid}' alt='QR Code'>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            ";
+
+        $mailer->isHTML(true);
+        $mailer->Body = $htmlBody;
+
+        // Send the email
+        $mailer->send();
+
+        // Redirect to a specific route after updating the ticket status
+        return redirect()->to('/admin/avail-tickets')->with('success', 'Ticket approved successfully.');
+    } catch (\Exception $e) {
+        // Handle any exceptions
+        return redirect()->back()->with('error', 'Error generating or saving QR code: ' . $e->getMessage());
+    }
 }
+
 
 // Function to update ticket status to "Declined"
 public function declineTicket($purchaseID)
