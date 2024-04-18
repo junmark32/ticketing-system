@@ -118,6 +118,7 @@
                 <tr>
                     <th>User ID</th>
                     <th>Username</th>
+                    <th>Email</th>
                     <th>User Type</th>
                     <th>School/Alumni Card/Generated Number</th>
                     <th>Ticket ID</th>
@@ -135,6 +136,7 @@
         <tr>
             <td><?= $user['UserID'] ?></td>
             <td><?= $user['Username'] ?></td>
+            <td><?= $ticket['Email'] ?></td>
             <td><?= $user['UserType'] ?></td>
             <td>
                 <?php

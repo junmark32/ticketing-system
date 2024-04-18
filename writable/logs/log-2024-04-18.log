@@ -449,3 +449,27 @@ in APPPATH\Views\admin\Display_Users.php on line 79.
  8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
  9 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
 10 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\DWCC2\\public\\index.php')
+CRITICAL - 2024-04-18 17:57:13 --> Undefined array key "Email"
+in APPPATH\Views\admin\Display_Avail_Tickets.php on line 140.
+ 1 APPPATH\Views\admin\Display_Avail_Tickets.php(140): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "Email"', 'C:\\laragon\\www\\DWCC2\\app\\Views\\admin\\Display_Avail_Tickets.php', 140)
+ 2 SYSTEMPATH\View\View.php(228): include('C:\\laragon\\www\\DWCC2\\app\\Views\\admin\\Display_Avail_Tickets.php')
+ 3 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('admin/Display_Avail_Tickets', [], true)
+ 5 APPPATH\Controllers\AdminController.php(321): view('admin/Display_Avail_Tickets', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\AdminController->showAvailTickets()
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\DWCC2\\public\\index.php')
+CRITICAL - 2024-04-18 17:58:59 --> Undefined array key "Email"
+in APPPATH\Views\admin\Display_Avail_Tickets.php on line 140.
+ 1 APPPATH\Views\admin\Display_Avail_Tickets.php(140): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "Email"', 'C:\\laragon\\www\\DWCC2\\app\\Views\\admin\\Display_Avail_Tickets.php', 140)
+ 2 SYSTEMPATH\View\View.php(228): include('C:\\laragon\\www\\DWCC2\\app\\Views\\admin\\Display_Avail_Tickets.php')
+ 3 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('admin/Display_Avail_Tickets', [], true)
+ 5 APPPATH\Controllers\AdminController.php(321): view('admin/Display_Avail_Tickets', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\AdminController->showAvailTickets()
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\AdminController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\DWCC2\\public\\index.php')
