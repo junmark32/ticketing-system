@@ -135,24 +135,23 @@ class UserController extends BaseController
             // Verify the password
             if (password_verify($password, $user['PasswordHash'])) {
                 // Password is correct, set session and redirect to dashboard or any desired page
-                $session = session();
-                $session->set('isLoggedIn', true);
-    
-                // Set user data array
                 $userData = [
                     'UserID' => $user['UserID'],
                     'Username' => $user['Username'],
                     'UserType' => $user['UserType'],
                     // Add more user data as needed
                 ];
+    
+                // Store the response data into session storage
+                $session = session();
                 $session->set('user_data', $userData);
     
                 // Redirect to appropriate dashboard based on UserType
                 switch ($user['UserType']) {
                     case 'admin':
-                        return redirect()->to('/admin_dashboard');
+                        return redirect()->to('/admin/dashboard');
                     case 'student':
-                        return redirect()->to('/Events');
+                        return redirect()->to('/Event');
                     case 'alumni':
                         return redirect()->to('/alumni_dashboard');
                     default:
@@ -167,6 +166,7 @@ class UserController extends BaseController
             return redirect()->back()->with('error', 'User does not exist.');
         }
     }
+    
     
  
     public function viewSessionData()
@@ -442,9 +442,6 @@ public function purchaseTicket($ticketTypeID)
                         <br>
                         Your ticket ' . $ticketType['TicketType'] . ' for ' . $event['EventName'] .
                         ' purchase is pending and awaiting approval from the admin.
-                        <br>
-                        <br>
-                        Date Avail: ' . $ticketPurchase['PurchaseDate'] . ' 
                         <br>
                         <br>
                         Thank you for your purchase.';

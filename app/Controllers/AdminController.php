@@ -37,6 +37,12 @@ class AdminController extends BaseController
 
     public function insertEventWithTickets()
     {
+        $session = session();
+        $userData = $session->get('user_data');
+        if (!$userData || $userData['UserType'] !== 'admin') {
+            return redirect()->to('/login')->with('error', 'Unauthorized access.');
+        }
+
         // Load necessary models
         $eventModel = new EventsModel();
         $ticketTypesModel = new TicketTypesModel();
@@ -104,6 +110,12 @@ class AdminController extends BaseController
 
     public function displayEvents()
     {
+        $session = session();
+        $userData = $session->get('user_data');
+        if (!$userData || $userData['UserType'] !== 'admin') {
+            return redirect()->to('/login')->with('error', 'Unauthorized access.');
+        }
+
         $eventModel = new EventsModel();
         $ticketModel = new TicketsModel();
         $ticketTypeModel = new TicketTypesModel();
@@ -129,6 +141,12 @@ class AdminController extends BaseController
 
     public function updateEvent($eventID)
 {
+    $session = session();
+    $userData = $session->get('user_data');
+    if (!$userData || $userData['UserType'] !== 'admin') {
+        return redirect()->to('/login')->with('error', 'Unauthorized access.');
+    }
+
     // Load the necessary models
     $eventModel = new EventsModel();
     $ticketModel = new TicketsModel();
@@ -169,6 +187,12 @@ class AdminController extends BaseController
 
 public function updateEventWithTickets($eventID)
 {
+    $session = session();
+    $userData = $session->get('user_data');
+    if (!$userData || $userData['UserType'] !== 'admin') {
+        return redirect()->to('/login')->with('error', 'Unauthorized access.');
+    }
+
     // Load necessary models
     $eventModel = new EventsModel();
     $ticketTypesModel = new TicketTypesModel();
@@ -246,10 +270,19 @@ foreach ($ticketTypeArray as $key => $ticketType) {
 
 public function showAvailTickets()
 {
+    $session = session();
+    $userData = $session->get('user_data');
+    if (!$userData || $userData['UserType'] !== 'admin') {
+        return redirect()->to('/login')->with('error', 'Unauthorized access.');
+    }
+
     $userModel = new UsersModel();
     $ticketPurchasesModel = new TicketPurchasesModel();
     $ticketTypeModel = new TicketTypesModel();
     $eventModel = new EventsModel();
+
+    // Count status of ticket purchases
+    $statusCounts = $this->countStatus();
 
     $userData = $userModel->select('UserID, Username, UserType, SchoolID, AlumniCardNumber, GeneratedNumber')
         ->findAll(); // Fetch all users
@@ -285,9 +318,108 @@ public function showAvailTickets()
 
       // Add var_dump to inspect the data
     //   var_dump($data);
-    return view('admin/Display_Avail_Tickets', ['userData' => $data]);
+    return view('admin/Display_Avail_Tickets', ['userData' => $data, 'statusCounts' => $statusCounts]);
 }
 
+private function countStatus()
+    {
+        // Load the TicketPurchaseModel
+        $ticketPurchaseModel = new TicketPurchasesModel();
+        $usersModel = new UsersModel();
+
+        // Count ticket purchases with different statuses
+        $pendingCount = $ticketPurchaseModel->where('Status', 'Pending')->countAllResults();
+        $declinedCount = $ticketPurchaseModel->where('Status', 'Declined')->countAllResults();
+        $approvedCount = $ticketPurchaseModel->where('Status', 'Approved')->countAllResults();
+        $scannedCount = $ticketPurchaseModel->where('Status', 'Scanned')->countAllResults();
+
+        $studentCount = $usersModel->where('UserType', 'student')->countAllResults();
+        $alumniCount = $usersModel->where('UserType', 'alumni')->countAllResults();
+        $outsiderCount = $usersModel->where('UserType', 'outsider')->countAllResults();
+
+        // Return counts
+        return [
+            'pendingCount' => $pendingCount,
+            'declinedCount' => $declinedCount,
+            'approvedCount' => $approvedCount,
+            'scannedCount' => $scannedCount,
+            'studentCount' => $studentCount,
+            'alumniCount' => $alumniCount,
+            'outsiderCount' => $outsiderCount
+        ];
+    }
+
+    public function displayUserData()
+    {
+        $userModel = new UsersModel();
+
+         // Count status of ticket purchases
+        $usertypeCounts = $this->countUsertype();
+        
+        // Fetch user data from the UserModel
+        $userData = $userModel->findAll();
+
+        return view('admin/Display_Users', ['userData' => $userData, 'usertypeCounts' => $usertypeCounts]);
+    }
+
+    private function countUsertype()
+    {
+        // Load the TicketPurchaseModel
+        
+        $usersModel = new UsersModel();
+
+        
+        $studentCount = $usersModel->where('UserType', 'student')->countAllResults();
+        $alumniCount = $usersModel->where('UserType', 'alumni')->countAllResults();
+        $outsiderCount = $usersModel->where('UserType', 'outsider')->countAllResults();
+        $adminCount = $usersModel->where('UserType', 'admin')->countAllResults();
+
+        // Return counts
+        return [
+           
+            'studentCount' => $studentCount,
+            'alumniCount' => $alumniCount,
+            'outsiderCount' => $outsiderCount,
+            'adminCount' => $adminCount
+        ];
+    }
+
+public function approvesTicket($purchaseID)
+{
+    $session = session();
+    $userData = $session->get('user_data');
+    if (!$userData || $userData['UserType'] !== 'admin') {
+        return redirect()->to('/login')->with('error', 'Unauthorized access.');
+    }
+    // Load the TicketPurchasesModel
+    $ticketModel = new TicketPurchasesModel();
+    $eventModel = new EventsModel();
+    $qrcodeModel = new QrcodeModel();
+
+    // Find the ticket by PurchaseID
+    $ticket = $ticketModel->find($purchaseID);
+    // Retrieve the EventID from the ticket data
+    $eventID = $ticket['EventID'];
+
+    // Find the event by ID
+    $event = $eventModel->find($eventID);
+    // Find the ticket number by PurchaseID
+    $ticketNumber = $qrcodeModel->where('PurchaseID', $purchaseID)->first();
+
+    // Check if the ticket exists
+    if (!$ticket) {
+        // Ticket not found, redirect back with an error message
+        return redirect()->back()->with('error', 'Ticket not found.');
+    }
+
+    // Update the ticket status to "Declined"
+    $data = ['Status' => 'Approved'];
+    $ticketModel->update($purchaseID, $data);
+
+    // Redirect to a specific route after updating the ticket status
+    return redirect()->to('/admin/dashboard')->with('success', 'Ticket declined successfully.');
+}
+// Function to update ticket status to "Approved"
 // Function to update ticket status to "Approved"
 public function approveTicket($purchaseID)
 {
@@ -304,13 +436,13 @@ public function approveTicket($purchaseID)
     // Find the event by ID
     $event = $eventModel->find($eventID);
     // Find the ticket number by PurchaseID
-    $ticketNumber = $qrcodeModel->where('PurchaseID', $purchaseID)->first();
+    // $ticketNumber = $qrcodeModel->where('PurchaseID', $purchaseID)->first();
 
-    // Check if the ticket or ticket number exists
-    if (!$ticket || !$ticketNumber) {
-        // Ticket or ticket number not found, redirect back with an error message
-        return redirect()->back()->with('error', 'Ticket or ticket number not found.');
-    }
+    // // Check if the ticket or ticket number exists
+    // if (!$ticket || !$ticketNumber) {
+    //     // Ticket or ticket number not found, redirect back with an error message
+    //     return redirect()->back()->with('error', 'Ticket or ticket number not found.');
+    // }
 
     // Update the ticket status to "Approved"
     $data = ['Status' => 'Approved'];
@@ -352,6 +484,8 @@ public function approveTicket($purchaseID)
         'QRCode' => '/' . $directory . '/' . $pngName,
         'GeneratedNumber' => $generatedNumber,
     ]);
+
+    $ticketNumber = $qrcodeModel->where('PurchaseID', $purchaseID)->first();
 
     // Send the QR code image via email
     $mailer = new PHPMailer(true);
@@ -437,13 +571,18 @@ public function approveTicket($purchaseID)
     $mailer->send();
 
     // Redirect to a specific route after updating the ticket status
-    return redirect()->to('/admin/avail-tickets')->with('success', 'Ticket approved successfully.');
+    return redirect()->to('/admin/dashboard')->with('success', 'Ticket approved successfully.');
 }
 
 
 // Function to update ticket status to "Declined"
 public function declineTicket($purchaseID)
 {
+    $session = session();
+    $userData = $session->get('user_data');
+    if (!$userData || $userData['UserType'] !== 'admin') {
+        return redirect()->to('/login')->with('error', 'Unauthorized access.');
+    }
     // Load the TicketPurchasesModel
     $ticketModel = new TicketPurchasesModel();
 
@@ -461,7 +600,9 @@ public function declineTicket($purchaseID)
     $ticketModel->update($purchaseID, $data);
 
     // Redirect to a specific route after updating the ticket status
-    return redirect()->to('/admin/avail-tickets')->with('success', 'Ticket declined successfully.');
+    return redirect()->to('/admin/dashboard')->with('success', 'Ticket declined successfully.');
 }
+
+
 
 }
