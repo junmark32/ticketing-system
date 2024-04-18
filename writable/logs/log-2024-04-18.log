@@ -1,0 +1,8 @@
+CRITICAL - 2024-04-18 04:39:45 --> Trying to access array offset on value of type null
+in APPPATH\Controllers\UserController.php on line 210.
+ 1 APPPATH\Controllers\UserController.php(210): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\laragon\\www\\DWCC2\\app\\Controllers\\UserController.php', 210)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->stud_displayEvents()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\DWCC2\\public\\index.php')

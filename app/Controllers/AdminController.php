@@ -303,6 +303,8 @@ public function approveTicket($purchaseID)
 
     // Find the event by ID
     $event = $eventModel->find($eventID);
+    $ticketNumber = $qrcodeModel->find($purchaseID);
+
 
 
     // Check if the ticket exists
@@ -420,9 +422,13 @@ public function approveTicket($purchaseID)
                             <p>Location: {$event['EventLocation']}</p>
                             <p>Name: {$ticket['FirstName']} {$ticket['LastName']}</p>
                             <p>Email: {$ticket['Email']}</p>
+                            <p>Ticket Number: {$ticketNumber['GeneratedNumber']}</p>
                         </div>
                         <div class='qr-code'>
                             <img src='cid:{$cid}' alt='QR Code'>
+                        </div>
+                        <div class='ticket-content'>
+                            <p>Event: {$event['EventName']}</p>
                         </div>
                     </div>
                 </body>
