@@ -19,6 +19,7 @@ class UserController extends BaseController
         return view('index');
     }
 
+
     public function studentRegister()
     {
         return view('user/Reg_Student');
@@ -118,7 +119,6 @@ class UserController extends BaseController
         // Generate a unique ID using timestamp or any other method
         return uniqid('OUT_', true);
     }
-
     public function fn_login()
     {
         // Load the model
@@ -151,16 +151,12 @@ class UserController extends BaseController
                 switch ($user['UserType']) {
                     case 'admin':
                         return redirect()->to('/admin_dashboard');
-                        break;
                     case 'student':
-                        return redirect()->to('/student/events');
-                        break;
+                        return redirect()->to('/Events');
                     case 'alumni':
                         return redirect()->to('/alumni_dashboard');
-                        break;
                     default:
                         return redirect()->to('/outsider_dashboard');
-                        break;
                 }
             } else {
                 // Password is incorrect, show error message
@@ -237,7 +233,7 @@ public function stud_displayEvents()
     }
 
     // Load the view and pass the data to it
-    return view('user/Student_Display_Events', ['events' => $events]);
+    return view('user/event', ['events' => $events]);
 }
 
 
@@ -460,7 +456,7 @@ public function purchaseTicket($ticketTypeID)
      }
 
     // Redirect to a success page or display a success message
-    return redirect()->to('/student/events')->with('success', 'Ticket purchased successfully.');
+    return redirect()->to('/Event')->with('success', 'Ticket purchased successfully.');
 }
 
 

@@ -20,7 +20,7 @@ $routes->match(['post','get'],'/student/events', 'UserController::stud_displayEv
 $routes->match(['post','get'],'/student/events/show-event-details/(:num)', 'UserController::showAvailableTickets/$1');
 $routes->match(['post','get'],'/student/events/ticket/buy/(:num)', 'UserController::buyTicket/$1'); 
 $routes->match(['post','get'],'/student/events/ticket/purchase/(:num)', 'UserController::purchaseTicket/$1');   
-
+$routes->get('/Event', 'UserController::stud_displayEvents');
 
 $routes->match(['post','get'],'/session', 'UserController::viewSessionData');
 //admin
@@ -34,3 +34,6 @@ $routes->get('/admin/avail-tickets', 'AdminController::showAvailTickets');
 $routes->match(['post', 'get'], '/admin/avail-tickets/approved/(:num)', 'AdminController::approveTicket/$1');
 $routes->match(['post', 'get'], '/admin/avail-tickets/declined/(:num)', 'AdminController::declineTicket/$1');
 
+//scanner
+$routes->get('/scanner', 'ScannerController::index');
+$routes->post('validation', 'ScannerController::validateQRCode');

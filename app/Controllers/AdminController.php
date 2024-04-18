@@ -303,14 +303,13 @@ public function approveTicket($purchaseID)
 
     // Find the event by ID
     $event = $eventModel->find($eventID);
-    $ticketNumber = $qrcodeModel->find($purchaseID);
+    // Find the ticket number by PurchaseID
+    $ticketNumber = $qrcodeModel->where('PurchaseID', $purchaseID)->first();
 
-
-
-    // Check if the ticket exists
-    if (!$ticket) {
-        // Ticket not found, redirect back with an error message
-        return redirect()->back()->with('error', 'Ticket not found.');
+    // Check if the ticket or ticket number exists
+    if (!$ticket || !$ticketNumber) {
+        // Ticket or ticket number not found, redirect back with an error message
+        return redirect()->back()->with('error', 'Ticket or ticket number not found.');
     }
 
     // Update the ticket status to "Approved"
@@ -326,64 +325,60 @@ public function approveTicket($purchaseID)
         'GeneratedNumber' => $generatedNumber,
     ]);
 
-    try {
-        // Create QR code options
-        $options = new QROptions([
-            'outputType' => QRCode::OUTPUT_IMAGE_PNG,
-            'eccLevel' => QRCode::ECC_H,
-            'imageBase64' => false,
-        ]);
+    // Create QR code options
+    $options = new QROptions([
+        'outputType' => QRCode::OUTPUT_IMAGE_PNG,
+        'eccLevel' => QRCode::ECC_H,
+        'imageBase64' => false,
+    ]);
 
-        // Create a QRCode instance
-        $qrcode = new QRCode($options);
+    // Create a QRCode instance
+    $qrcode = new QRCode($options);
 
-        // Generate the QR code image
-        $qrCodeImage = $qrcode->render($qrCodeData);
+    // Generate the QR code image
+    $qrCodeImage = $qrcode->render($qrCodeData);
 
-        // Define the file path and name for saving the QR code image as PNG
-        $directory = 'uploads/qrcodes';
-        $pngName = 'qrcode_' . $purchaseID . '.png';
-        $pngFilePath = ROOTPATH . 'public/' . $directory . '/' . $pngName;
+    // Define the file path and name for saving the QR code image as PNG
+    $directory = 'uploads/qrcodes';
+    $pngName = 'qrcode_' . $purchaseID . '.png';
+    $pngFilePath = ROOTPATH . 'public/' . $directory . '/' . $pngName;
 
-        // Save the QR code image to file
-        file_put_contents($pngFilePath, $qrCodeImage);
+    // Save the QR code image to file
+    file_put_contents($pngFilePath, $qrCodeImage);
 
-        // Save the QR code file path and generated number to the QrcodeModel
-        $qrcodeModel->insert([
-            'PurchaseID' => $purchaseID,
-            'QRCode' => '/' . $directory . '/' . $pngName,
-            'GeneratedNumber' => $generatedNumber,
-        ]);
+    // Save the QR code file path and generated number to the QrcodeModel
+    $qrcodeModel->insert([
+        'PurchaseID' => $purchaseID,
+        'QRCode' => '/' . $directory . '/' . $pngName,
+        'GeneratedNumber' => $generatedNumber,
+    ]);
 
-        //
-        // Send the QR code image via email
-        $mailer = new PHPMailer(true);
-        $mailer->isSMTP();
-        // Configure your SMTP settings here
-        $mailer->Host = 'smtp.gmail.com';
-        $mailer->SMTPAuth = true;
-        $mailer->Username = 'adonaieyecare@gmail.com';
-        $mailer->Password = 'suxqojbojluggurs';
-        $mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mailer->Port = 587;
+    // Send the QR code image via email
+    $mailer = new PHPMailer(true);
+    $mailer->isSMTP();
+    // Configure your SMTP settings here
+    $mailer->Host = 'smtp.gmail.com';
+    $mailer->SMTPAuth = true;
+    $mailer->Username = 'adonaieyecare@gmail.com';
+    $mailer->Password = 'suxqojbojluggurs';
+    $mailer->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mailer->Port = 587;
 
-        // Set sender and recipient
-        $mailer->setFrom('adonaieyecare@gmail.com', 'Adonai-EyeCare');
-        $mailer->addAddress($ticket['Email'], $ticket['FirstName'] . ' ' . $ticket['LastName']);
+    // Set sender and recipient
+    $mailer->setFrom('adonaieyecare@gmail.com', 'Adonai-EyeCare');
+    $mailer->addAddress($ticket['Email'], $ticket['FirstName'] . ' ' . $ticket['LastName']);
 
-        // Attach the QR code image to the email
-        $mailer->addAttachment($pngFilePath, 'qrcode.png');
-         // Attach the QR code image to the email and get the CID
-         $cid = basename($pngFilePath);
-         $mailer->addEmbeddedImage($pngFilePath, $cid, 'qrcode.png');
+    // Attach the QR code image to the email
+    $mailer->addAttachment($pngFilePath, 'qrcode.png');
+    // Attach the QR code image to the email and get the CID
+    $cid = basename($pngFilePath);
+    $mailer->addEmbeddedImage($pngFilePath, $cid, 'qrcode.png');
 
-        // Set email subject
-        $mailer->Subject = 'QR Code for Ticket Purchase';
+    // Set email subject
+    $mailer->Subject = 'QR Code for Ticket Purchase';
 
-
-        // Set email body with HTML template
-       // Set email body with HTML template
-        $htmlBody = "
+    // Set email body with HTML template
+    $htmlBody = "
                 <html>
                 <head>
                     <title>QR Code for Ticket Purchase</title>
@@ -435,18 +430,14 @@ public function approveTicket($purchaseID)
                 </html>
             ";
 
-        $mailer->isHTML(true);
-        $mailer->Body = $htmlBody;
+    $mailer->isHTML(true);
+    $mailer->Body = $htmlBody;
 
-        // Send the email
-        $mailer->send();
+    // Send the email
+    $mailer->send();
 
-        // Redirect to a specific route after updating the ticket status
-        return redirect()->to('/admin/avail-tickets')->with('success', 'Ticket approved successfully.');
-    } catch (\Exception $e) {
-        // Handle any exceptions
-        return redirect()->back()->with('error', 'Error generating or saving QR code: ' . $e->getMessage());
-    }
+    // Redirect to a specific route after updating the ticket status
+    return redirect()->to('/admin/avail-tickets')->with('success', 'Ticket approved successfully.');
 }
 
 
