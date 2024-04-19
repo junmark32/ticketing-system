@@ -3,7 +3,7 @@
             <div class="row">
                 <div class="col-lg-7">
                     <div class="hero-text">
-                        <span>5 to 9 may 2019, mardavall hotel, New York</span>
+                        <span>C56G+878, Governor Infantado, Calapan, 5200 Oriental Mindoro</span>
                         <h2>Book Your Ticket</h2>
                         <a href="#" class="primary-btn">Buy Ticket</a>
                     </div>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="ha-text">
-                        <h2>About Conference</h2>
+                        <h2>About</h2>
                         <p>When I first got into the online advertising business, I was looking for the magical
                             combination that would put my website into the top search engine rankings, catapult me to
                             the forefront of the minds or individuals looking to buy my product, and generally make me

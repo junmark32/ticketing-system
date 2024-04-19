@@ -243,3 +243,295 @@ in APPPATH\Controllers\UserController.php on line 447.
  4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
  5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
  6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\DWCC2\\public\\index.php')
+CRITICAL - 2024-04-18 12:40:55 --> Trying to access array offset on value of type null
+in APPPATH\Controllers\UserController.php on line 206.
+ 1 APPPATH\Controllers\UserController.php(206): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\UserController.php', 206)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->stud_displayEvents()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+ERROR - 2024-04-18 12:42:21 --> Error connecting to the database: mysqli_sql_exception: Unknown database 'ticketing' in C:\laragon\www\ticketing-system\system\Database\MySQLi\Connection.php:185
+Stack trace:
+#0 C:\laragon\www\ticketing-system\system\Database\MySQLi\Connection.php(185): mysqli->real_connect('localhost', 'root', '', 'ticketing', 3306, '', 0)
+#1 C:\laragon\www\ticketing-system\system\Database\BaseConnection.php(392): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\laragon\www\ticketing-system\system\Database\BaseConnection.php(575): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\laragon\www\ticketing-system\system\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\laragon\www\ticketing-system\system\Model.php(264): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\laragon\www\ticketing-system\system\BaseModel.php(662): CodeIgniter\Model->doFirst()
+#6 C:\laragon\www\ticketing-system\app\Controllers\UserController.php(132): CodeIgniter\BaseModel->first()
+#7 C:\laragon\www\ticketing-system\system\CodeIgniter.php(942): App\Controllers\UserController->fn_login()
+#8 C:\laragon\www\ticketing-system\system\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+#9 C:\laragon\www\ticketing-system\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\laragon\www\ticketing-system\public\index.php(79): CodeIgniter\CodeIgniter->run()
+#11 C:\laragon\www\ticketing-system\system\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\...')
+#12 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Unknown database 'ticketing' in C:\laragon\www\ticketing-system\system\Database\MySQLi\Connection.php:229
+Stack trace:
+#0 C:\laragon\www\ticketing-system\system\Database\BaseConnection.php(392): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\laragon\www\ticketing-system\system\Database\BaseConnection.php(575): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\laragon\www\ticketing-system\system\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#3 C:\laragon\www\ticketing-system\system\Model.php(264): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\laragon\www\ticketing-system\system\BaseModel.php(662): CodeIgniter\Model->doFirst()
+#5 C:\laragon\www\ticketing-system\app\Controllers\UserController.php(132): CodeIgniter\BaseModel->first()
+#6 C:\laragon\www\ticketing-system\system\CodeIgniter.php(942): App\Controllers\UserController->fn_login()
+#7 C:\laragon\www\ticketing-system\system\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+#8 C:\laragon\www\ticketing-system\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\laragon\www\ticketing-system\public\index.php(79): CodeIgniter\CodeIgniter->run()
+#10 C:\laragon\www\ticketing-system\system\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\...')
+#11 {main}
+CRITICAL - 2024-04-18 12:42:21 --> Unable to connect to the database.
+Main connection [MySQLi]: Unknown database 'ticketing'
+in SYSTEMPATH\Database\BaseConnection.php on line 428.
+ 1 SYSTEMPATH\Database\BaseConnection.php(575): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `users`
+WHERE `Username` = :Username:
+ LIMIT 1', [...], false)
+ 3 SYSTEMPATH\Model.php(264): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\BaseModel.php(662): CodeIgniter\Model->doFirst()
+ 5 APPPATH\Controllers\UserController.php(132): CodeIgniter\BaseModel->first()
+ 6 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->fn_login()
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 12:54:11 --> syntax error, unexpected token "}", expecting ";"
+in APPPATH\Controllers\UserController.php on line 24.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(291): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\laragon\\www\\ticketing-system\\app\\Controllers\\UserController.php')
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(269): CodeIgniter\Autoloader\Autoloader->loadInNamespace('App\\Controllers\\UserController')
+ 3 [internal function]: CodeIgniter\Autoloader\Autoloader->loadClass('App\\Controllers\\UserController')
+ 4 SYSTEMPATH\CodeIgniter.php(900): class_exists('\\App\\Controllers\\UserController', true)
+ 5 SYSTEMPATH\CodeIgniter.php(489): CodeIgniter\CodeIgniter->startController()
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 12:57:54 --> Invalid file: "main.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('main.php')
+ 2 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('main', [], true)
+ 3 APPPATH\Controllers\UserController.php(23): view('main')
+ 4 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->homepage()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 13:14:49 --> Undefined variable $ticketStatus
+in APPPATH\Views\user\chop\header.php on line 26.
+ 1 APPPATH\Views\user\chop\header.php(26): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $ticketStatus', 'C:\\laragon\\www\\ticketing-system\\app\\Views\\user\\chop\\header.php', 26)
+ 2 SYSTEMPATH\View\View.php(228): include('C:\\laragon\\www\\ticketing-system\\app\\Views\\user\\chop\\header.php')
+ 3 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\View\View.php(469): CodeIgniter\View\View->render('user/chop/header.php', null, true)
+ 5 APPPATH\Views\user\main.php(4): CodeIgniter\View\View->include('user/chop/header.php')
+ 6 SYSTEMPATH\View\View.php(228): include('C:\\laragon\\www\\ticketing-system\\app\\Views\\user\\main.php')
+ 7 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('user/main', [], true)
+ 9 APPPATH\Controllers\UserController.php(23): view('user/main')
+10 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->homepage()
+11 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+12 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+ERROR - 2024-04-18 13:24:48 --> mysqli_sql_exception: Unknown column 'user_id' in 'where clause' in C:\laragon\www\ticketing-system\system\Database\MySQLi\Connection.php:306
+Stack trace:
+#0 C:\laragon\www\ticketing-system\system\Database\MySQLi\Connection.php(306): mysqli->query('SELECT *\nFROM `...', 0)
+#1 C:\laragon\www\ticketing-system\system\Database\BaseConnection.php(693): CodeIgniter\Database\MySQLi\Connection->execute('SELECT *\nFROM `...')
+#2 C:\laragon\www\ticketing-system\system\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT *\nFROM `...')
+#3 C:\laragon\www\ticketing-system\system\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT *\nFROM `...', Array, false)
+#4 C:\laragon\www\ticketing-system\system\Model.php(237): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\laragon\www\ticketing-system\system\BaseModel.php(624): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\laragon\www\ticketing-system\app\Controllers\UserController.php(47): CodeIgniter\BaseModel->findAll()
+#7 C:\laragon\www\ticketing-system\system\CodeIgniter.php(942): App\Controllers\UserController->homepage()
+#8 C:\laragon\www\ticketing-system\system\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+#9 C:\laragon\www\ticketing-system\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\laragon\www\ticketing-system\public\index.php(79): CodeIgniter\CodeIgniter->run()
+#11 C:\laragon\www\ticketing-system\system\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\...')
+#12 {main}
+CRITICAL - 2024-04-18 13:24:48 --> Unknown column 'user_id' in 'where clause'
+in SYSTEMPATH\Database\BaseConnection.php on line 647.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT *
+FROM `ticketpurchases`
+WHERE `user_id` = :user_id:', [...], false)
+ 2 SYSTEMPATH\Model.php(237): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(624): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Controllers\UserController.php(47): CodeIgniter\BaseModel->findAll()
+ 5 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->homepage()
+ 6 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 7 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+ERROR - 2024-04-18 13:29:25 --> mysqli_sql_exception: Unknown column 'ticketpurchases.user_id' in 'where clause' in C:\laragon\www\ticketing-system\system\Database\MySQLi\Connection.php:306
+Stack trace:
+#0 C:\laragon\www\ticketing-system\system\Database\MySQLi\Connection.php(306): mysqli->query('SELECT `ticketp...', 0)
+#1 C:\laragon\www\ticketing-system\system\Database\BaseConnection.php(693): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `ticketp...')
+#2 C:\laragon\www\ticketing-system\system\Database\BaseConnection.php(607): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `ticketp...')
+#3 C:\laragon\www\ticketing-system\system\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT `ticketp...', Array, false)
+#4 C:\laragon\www\ticketing-system\system\Model.php(237): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\laragon\www\ticketing-system\system\BaseModel.php(624): CodeIgniter\Model->doFindAll(0, 0)
+#6 C:\laragon\www\ticketing-system\app\Controllers\UserController.php(54): CodeIgniter\BaseModel->findAll()
+#7 C:\laragon\www\ticketing-system\system\CodeIgniter.php(942): App\Controllers\UserController->homepage()
+#8 C:\laragon\www\ticketing-system\system\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+#9 C:\laragon\www\ticketing-system\system\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#10 C:\laragon\www\ticketing-system\public\index.php(79): CodeIgniter\CodeIgniter->run()
+#11 C:\laragon\www\ticketing-system\system\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\...')
+#12 {main}
+CRITICAL - 2024-04-18 13:29:25 --> Unknown column 'ticketpurchases.user_id' in 'where clause'
+in SYSTEMPATH\Database\BaseConnection.php on line 647.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1615): CodeIgniter\Database\BaseConnection->query('SELECT `ticketpurchases`.*, `events`.`EventName`, `tickettypes`.`TicketType`
+FROM `ticketpurchases`
+JOIN `events` ON `events`.`EventID` = `ticketpurchases`.`EventID`
+JOIN `tickettypes` ON `tickettypes`.`TicketTypeID` = `ticketpurchases`.`TicketTypeID`
+WHERE `ticketpurchases`.`user_id` = :ticketpurchases.user_id:', [...], false)
+ 2 SYSTEMPATH\Model.php(237): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(624): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Controllers\UserController.php(54): CodeIgniter\BaseModel->findAll()
+ 5 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->homepage()
+ 6 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 7 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 13:30:03 --> Invalid file: "sidebar_view.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('sidebar_view.php')
+ 2 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('sidebar_view', [], true)
+ 3 APPPATH\Controllers\UserController.php(60): view('sidebar_view', [...])
+ 4 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->homepage()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 13:46:18 --> Trying to access array offset on value of type null
+in APPPATH\Controllers\UserController.php on line 473.
+ 1 APPPATH\Controllers\UserController.php(473): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\UserController.php', 473)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->purchaseTicket('24')
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 13:46:53 --> Undefined array key "ticket_type"
+in APPPATH\Views\user\chop\header.php on line 9.
+ 1 APPPATH\Views\user\chop\header.php(9): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "ticket_type"', 'C:\\laragon\\www\\ticketing-system\\app\\Views\\user\\chop\\header.php', 9)
+ 2 SYSTEMPATH\View\View.php(228): include('C:\\laragon\\www\\ticketing-system\\app\\Views\\user\\chop\\header.php')
+ 3 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\View\View.php(469): CodeIgniter\View\View->render('user/chop/header.php', null, true)
+ 5 APPPATH\Views\user\main.php(4): CodeIgniter\View\View->include('user/chop/header.php')
+ 6 SYSTEMPATH\View\View.php(228): include('C:\\laragon\\www\\ticketing-system\\app\\Views\\user\\main.php')
+ 7 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 8 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('user/main', [], true)
+ 9 APPPATH\Controllers\UserController.php(60): view('user/main', [...])
+10 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->homepage()
+11 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+12 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+13 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+14 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 14:03:51 --> Trying to access array offset on value of type null
+in APPPATH\Controllers\UserController.php on line 473.
+ 1 APPPATH\Controllers\UserController.php(473): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\UserController.php', 473)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->purchaseTicket('27')
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 14:46:46 --> Undefined variable $events
+in APPPATH\Views\user\ticketpurchase.php on line 31.
+ 1 APPPATH\Views\user\ticketpurchase.php(31): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $events', 'C:\\laragon\\www\\ticketing-system\\app\\Views\\user\\ticketpurchase.php', 31)
+ 2 SYSTEMPATH\View\View.php(228): include('C:\\laragon\\www\\ticketing-system\\app\\Views\\user\\ticketpurchase.php')
+ 3 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('user/ticketpurchase', [], true)
+ 5 APPPATH\Controllers\UserController.php(337): view('user/ticketpurchase', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->showAvailableTickets('5')
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 14:47:42 --> Invalid file: "user/ticketpurchases.php"
+in SYSTEMPATH\Exceptions\FrameworkException.php on line 39.
+ 1 SYSTEMPATH\View\View.php(216): CodeIgniter\Exceptions\FrameworkException::forInvalidFile('user/ticketpurchases.php')
+ 2 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('user/ticketpurchases', [], true)
+ 3 APPPATH\Controllers\UserController.php(19): view('user/ticketpurchases')
+ 4 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->index()
+ 5 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 6 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 14:47:55 --> Undefined variable $events
+in APPPATH\Views\user\ticketpurchase.php on line 31.
+ 1 APPPATH\Views\user\ticketpurchase.php(31): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $events', 'C:\\laragon\\www\\ticketing-system\\app\\Views\\user\\ticketpurchase.php', 31)
+ 2 SYSTEMPATH\View\View.php(228): include('C:\\laragon\\www\\ticketing-system\\app\\Views\\user\\ticketpurchase.php')
+ 3 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('user/ticketpurchase', [], true)
+ 5 APPPATH\Controllers\UserController.php(19): view('user/ticketpurchase')
+ 6 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 15:53:12 --> Trying to access array offset on value of type null
+in APPPATH\Controllers\UserController.php on line 487.
+ 1 APPPATH\Controllers\UserController.php(487): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Trying to access array offset on value of type null', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\UserController.php', 487)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->purchaseTicket('28')
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 16:05:24 --> Undefined variable $event
+in APPPATH\Views\user\viewticket.php on line 77.
+ 1 APPPATH\Views\user\viewticket.php(77): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $event', 'C:\\laragon\\www\\ticketing-system\\app\\Views\\user\\viewticket.php', 77)
+ 2 SYSTEMPATH\View\View.php(228): include('C:\\laragon\\www\\ticketing-system\\app\\Views\\user\\viewticket.php')
+ 3 SYSTEMPATH\View\View.php(231): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1190): CodeIgniter\View\View->render('user/viewticket', [], true)
+ 5 APPPATH\Controllers\UserController.php(19): view('user/viewticket')
+ 6 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 8 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 16:43:09 --> Attempt to read property "TicketID" on array
+in APPPATH\Controllers\ScannerController.php on line 50.
+ 1 APPPATH\Controllers\ScannerController.php(50): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Attempt to read property "TicketID" on array', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\ScannerController.php', 50)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\ScannerController->validateQRCode()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ScannerController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 16:45:21 --> Attempt to read property "TicketID" on array
+in APPPATH\Controllers\ScannerController.php on line 51.
+ 1 APPPATH\Controllers\ScannerController.php(51): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Attempt to read property "TicketID" on array', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\ScannerController.php', 51)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\ScannerController->validateQRCode()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ScannerController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 16:55:56 --> Undefined array key "EventID"
+in APPPATH\Controllers\ScannerController.php on line 55.
+ 1 APPPATH\Controllers\ScannerController.php(55): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "EventID"', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\ScannerController.php', 55)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\ScannerController->validateQRCode()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ScannerController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 17:00:58 --> Undefined array key "Status"
+in APPPATH\Controllers\ScannerController.php on line 58.
+ 1 APPPATH\Controllers\ScannerController.php(58): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "Status"', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\ScannerController.php', 58)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\ScannerController->validateQRCode()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ScannerController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 17:02:21 --> Undefined array key "PurchaseID"
+in APPPATH\Controllers\ScannerController.php on line 60.
+ 1 APPPATH\Controllers\ScannerController.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "PurchaseID"', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\ScannerController.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\ScannerController->validateQRCode()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ScannerController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-18 17:46:08 --> Undefined variable $ticketPurchaseModel
+in APPPATH\Controllers\UserController.php on line 419.
+ 1 APPPATH\Controllers\UserController.php(419): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $ticketPurchaseModel', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\UserController.php', 419)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\UserController->purchaseTicket('28')
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\UserController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')

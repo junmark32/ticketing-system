@@ -7,6 +7,8 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 $routes->get('/tickets/login', 'UserController::index');
+$routes->get('/registerto', 'UserController::registerto');
+
 $routes->match(['post','get'],'/fn_login', 'UserController::fn_login');
 // $routes->get('/Admin/Dashboard', 'UserController::adminDashboard');
 $routes->get('/Student/Register', 'UserController::studentRegister');
@@ -16,12 +18,14 @@ $routes->match(['post','get'],'/registerAlumni', 'UserController::registerAlumni
 $routes->get('/Outsider/Register', 'UserController::outsiderRegister');
 $routes->match(['post','get'],'/registerOutsider', 'UserController::registerOutsider');
 
-$routes->match(['post','get'],'/student/events', 'UserController::stud_displayEvents');
-$routes->match(['post','get'],'/student/events/show-event-details/(:num)', 'UserController::showAvailableTickets/$1');
-$routes->match(['post','get'],'/student/events/ticket/buy/(:num)', 'UserController::buyTicket/$1'); 
-$routes->match(['post','get'],'/student/events/ticket/purchase/(:num)', 'UserController::purchaseTicket/$1');   
-$routes->get('/Event', 'UserController::stud_displayEvents');
 
+$routes->match(['post','get'],'show-event-details/(:num)', 'UserController::showAvailableTickets/$1');
+$routes->match(['post','get'],'ticket/buy/(:num)', 'UserController::buyTicket/$1'); 
+$routes->match(['post','get'],'events/ticket/purchase/(:num)', 'UserController::purchaseTicket/$1');   
+$routes->get('/Event', 'UserController::stud_displayEvents');
+$routes->get('/homepage', 'UserController::homepage');
+$routes->get('/homepage', 'UserController::homepage');
+$routes->get('/ticketpurch', 'UserController::index');
 $routes->match(['post','get'],'/session', 'UserController::viewSessionData');
 //admin
 $routes->get('/admin/dashboard', 'AdminController::adminDB');

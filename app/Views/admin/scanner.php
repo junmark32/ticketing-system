@@ -30,6 +30,8 @@
             padding: 20px;
             border: 1px solid #888;
             width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 400px; /* Limit width on larger screens */
+            border-radius: 10px; /* Rounded corners */
         }
         
         /* Close button */
@@ -46,10 +48,43 @@
             text-decoration: none;
             cursor: pointer;
         }
+
+        /* Center content */
+        #preview {
+            display: block;
+            margin: 0 auto;
+            width: 80%; /* Adjust to your preference */
+            max-width: 300px; /* Limit width on larger screens */
+            border: 2px solid #333; /* Add a border for visibility */
+            border-radius: 10px; /* Rounded corners */
+        }
+
+        input[type="text"] {
+            display: block;
+            margin: 20px auto;
+            width: 80%; /* Adjust to your preference */
+            max-width: 300px; /* Limit width on larger screens */
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <h1>QR Code Scanner</h1>
+    <h1 style="text-align: center;">QR Code Scanner</h1>
     <video id="preview"></video>
     <!-- Add input field and button -->
     <input type="text" id="manualGeneratedNumber" placeholder="Enter Generated Number">
@@ -76,7 +111,9 @@
             });
             Instascan.Camera.getCameras().then(function (cameras) {
                 if (cameras.length > 0) {
-                    scanner.start(cameras[0]);
+                    // Select the back camera if available
+                    let backCamera = cameras.find(camera => camera.name.toLowerCase().includes('back'));
+                    scanner.start(backCamera || cameras[0]);
                 } else {
                     console.error('No cameras found.');
                 }
@@ -85,48 +122,58 @@
             });
         }
 
-function displayModal(content) {
-    let modal = document.getElementById('myModal');
-    let modalContent = document.getElementById('modal-result');
-    modalContent.innerText = content;
-    modal.style.display = "block";
-    let { PurchaseID, GeneratedNumber } = JSON.parse(content);
+        function displayModal(content) {
+            let modal = document.getElementById('myModal');
+            let modalContent = document.getElementById('modal-result');
+            modalContent.innerText = content;
+            modal.style.display = "block";
+            let { PurchaseID, GeneratedNumber } = JSON.parse(content);
 
-    // Send data to server for validation
-    fetch('validation', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ purchaseId: PurchaseID, generatedNumber: GeneratedNumber }),
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('Network was not ok.');
-        }
-    })
-    .then(data => {
-        // Display result returned from server
-        modalContent.innerText = data.message;
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+            // Send data to server for validation
+            fetch('validation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ purchaseId: PurchaseID, generatedNumber: GeneratedNumber }),
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Network was not ok.');
+                }
+            })
+            .then(data => {
+                // Display result returned from server
+                modalContent.innerText = data.message;
+                // Display ticket details if available
+                if (data.ticket_details) {
+                    let ticketDetails = data.ticket_details;
+                    modalContent.innerHTML += `<p>Ticket ID: ${ticketDetails.TicketID}</p>`;
+                    modalContent.innerHTML += `<p>First Name: ${ticketDetails.FirstName}</p>`;
+                    modalContent.innerHTML += `<p>Email: ${ticketDetails.Email}</p>`;
+                    modalContent.innerHTML += `<p>Phone: ${ticketDetails.Phone}</p>`;
+                    modalContent.innerHTML += `<p>Purchase Date: ${ticketDetails.PurchaseDate}</p>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
 
-    // Close the modal when the user clicks anywhere outside of it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+            // Close the modal when the user clicks anywhere outside of it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+            // Close the modal when the user clicks on the close button
+            let closeButton = document.getElementsByClassName("close")[0];
+            closeButton.onclick = function() {
+                modal.style.display = "none";
+            }
         }
-    }
-    // Close the modal when the user clicks on the close button
-    let closeButton = document.getElementsByClassName("close")[0];
-    closeButton.onclick = function() {
-        modal.style.display = "none";
-    }
-}</script>
+    </script>
 </body>
 </html>
 

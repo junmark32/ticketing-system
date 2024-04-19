@@ -13,7 +13,6 @@ class ScannerController extends BaseController
         return view('admin/scanner');
     }
 
-
     public function validateQRCode()
     {
         $request = $this->request->getJSON();
@@ -43,8 +42,11 @@ class ScannerController extends BaseController
         // Load the TicketpurchasesModel
         $ticketPurchaseModel = new TicketpurchasesModel();
     
-        $ticketPurchase = $ticketPurchaseModel->where('PurchaseID', $purchaseId)->first();
-
+        // Fetch ticket purchase details along with associated user details
+        $ticketPurchase = $ticketPurchaseModel->select(['TicketID', 'FirstName', 'Email', 'Phone', 'PurchaseDate', 'EventID','Status'])
+                                              ->where('PurchaseID', $purchaseId)
+                                              ->first();
+    
         if ($ticketPurchase) {
             // Check if the event associated with the ticket is still available
             $eventModel = new EventsModel();
@@ -53,12 +55,17 @@ class ScannerController extends BaseController
             if ($event) {
                 // Event exists, proceed with scanning
                 // Check if the status is 'Scanned' or 'Denied'
-                if ($ticketPurchase['Status'] === 'Scanned' || $ticketPurchase['Status'] === 'Denied') {
-                    return $this->response->setJSON(['message' => 'Sorry, this ticket is invalid.']);
-                }
-                // Update the status to 'Scanned'
-                $ticketPurchaseModel->update($ticketPurchase['PurchaseID'], ['Status' => 'Scanned']); // Use update method instead of save
-                return $this->response->setJSON(['message' => 'QR code scanned successfully.']);
+
+                return $this->response->setJSON([
+                    'message' => 'QR code scanned successfully.',
+                    'ticket_details' => [
+                        'TicketID' => $ticketPurchase['TicketID'],
+                        'FirstName' => $ticketPurchase['FirstName'],
+                        'Email' => $ticketPurchase['Email'],
+                        'Phone' => $ticketPurchase['Phone'],
+                        'PurchaseDate' => $ticketPurchase['PurchaseDate']
+                    ]
+                ]);
             } else {
                 // Event associated with the ticket is no longer available
                 return $this->response->setJSON(['message' => 'Sorry, the event that the ticket is from is no longer available.']);

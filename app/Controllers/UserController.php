@@ -20,6 +20,12 @@ class UserController extends BaseController
     }
 
 
+    public function registerto()
+    {
+        return view('registerto');
+    }
+
+
     public function studentRegister()
     {
         return view('user/Reg_Student');
@@ -34,6 +40,31 @@ class UserController extends BaseController
     {
         return view('user/Reg_Outsider');
     }
+
+    public function homepage()
+    {
+        // Load the necessary models and services
+        $session = session();
+        $ticketPurchaseModel = new TicketpurchasesModel();
+        $eventsModel = new EventsModel(); // Assuming you have an EventsModel
+        $ticketTypesModel = new TicketTypesModel(); // Assuming you have a TicketTypesModel
+    
+        // Get the user ID from the session
+        $userId = $session->get('user_data')['UserID']; // Assuming 'UserID' is the key for user ID in the session
+    
+        // Query the ticketpurchases table to select ticket purchases for the user, joining with Event and TicketType tables
+        $ticketPurchases = $ticketPurchaseModel
+            ->select('ticketpurchases.*, events.EventName, tickettypes.TicketType')
+            ->join('events', 'events.EventID = ticketpurchases.EventID')
+            ->join('tickettypes', 'tickettypes.TicketTypeID = ticketpurchases.TicketTypeID')
+            ->where('ticketpurchases.UserID', $userId)
+            ->findAll();
+    
+        // Pass ticket purchases data to the main view along with the sidebar HTML
+        return view('user/main', ['ticketPurchases' => $ticketPurchases]);
+    }
+    
+    
 
     public function registerStudent()
     {
@@ -152,11 +183,11 @@ class UserController extends BaseController
                     case 'admin':
                         return redirect()->to('/admin_dashboard');
                     case 'student':
-                        return redirect()->to('/Events');
+                        return redirect()->to('/homepage');
                     case 'alumni':
-                        return redirect()->to('/alumni_dashboard');
+                        return redirect()->to('/homepage');
                     default:
-                        return redirect()->to('/outsider_dashboard');
+                        return redirect()->to('/homepage');
                 }
             } else {
                 // Password is incorrect, show error message
@@ -273,9 +304,10 @@ public function showAvailableTickets($eventID)
     $filtered_ticket_types = [];
     foreach ($ticket_types as $ticket_type) {
         $ticketTypeDetails = $ticketTypeModel->find($ticket_type['TicketTypeID']);
-        if ($userType === 'student') {
-            // If user is a student, include only VIP and Student tickets
-            if ($ticketTypeDetails['TicketType'] === 'VIP' || $ticketTypeDetails['TicketType'] === 'Student') {
+        if ($userType === 'outsider') {
+            // If user is an Outsider, include only General Admission and VIP ticket types
+            if ($ticketTypeDetails['TicketType'] === 'General Admission' || 
+                $ticketTypeDetails['TicketType'] === 'VIP') {
                 $filtered_ticket_types[] = [
                     'TicketTypeID' => $ticketTypeDetails['TicketTypeID'], // Include TicketTypeID
                     'TicketType' => $ticketTypeDetails['TicketType'],
@@ -283,8 +315,19 @@ public function showAvailableTickets($eventID)
                     'Quantity' => $ticketTypeDetails['Quantity']
                 ];
             }
-        } else {
-            // If user is not a student, include all ticket types
+        } elseif ($userType === 'student') {
+            // If user is a Student, include only General Admission and VIP ticket types
+            if ($ticketTypeDetails['TicketType'] === 'General Admission' || 
+                $ticketTypeDetails['TicketType'] === 'VIP') {
+                $filtered_ticket_types[] = [
+                    'TicketTypeID' => $ticketTypeDetails['TicketTypeID'], // Include TicketTypeID
+                    'TicketType' => $ticketTypeDetails['TicketType'],
+                    'Price' => $ticketTypeDetails['Price'],
+                    'Quantity' => $ticketTypeDetails['Quantity']
+                ];
+            }
+        } elseif ($userType === 'alumni') {
+            // If user is Alumni, include General Admission, VIP, and Student ticket types
             $filtered_ticket_types[] = [
                 'TicketTypeID' => $ticketTypeDetails['TicketTypeID'], // Include TicketTypeID
                 'TicketType' => $ticketTypeDetails['TicketType'],
@@ -296,8 +339,10 @@ public function showAvailableTickets($eventID)
 
     $event['ticket_types'] = $filtered_ticket_types;
 
-    return view('user/View_Ticket_Event', ['event' => $event]);
+    return view('user/viewticket', ['event' => $event]);
 }
+
+
 
 
 public function buyTicket($ticketTypeID)
@@ -311,7 +356,7 @@ public function buyTicket($ticketTypeID)
     $eventDetails = $eventModel->find($ticketTypeDetails['EventID']);
 
     // Pass both ticket type and event details to the view
-    return view('user/Buy_Ticket_Event', [
+    return view('user/buyticket', [
         'ticketTypeID' => $ticketTypeID,
         'event' => $eventDetails,
         'ticketType' => $ticketTypeDetails
@@ -343,11 +388,10 @@ public function purchaseTicket($ticketTypeID)
     $eventsModel = new EventsModel();
     $event = $eventsModel->find($ticketType['EventID']);
 
-    // Get the ticket purchsedetails based on TicketTypeID
+    // Get the ticket purchase details based on TicketTypeID
     $ticketpurchasesModel = new TicketPurchasesModel();
     $ticketPurchase = $ticketpurchasesModel->where('TicketTypeID', $ticketTypeID)->first();
     
-
     if (!$ticketType) {
         // Ticket type not found, handle accordingly (redirect or show error)
         return redirect()->to('/error_page')->with('error', 'Ticket type not found.');
@@ -378,6 +422,15 @@ public function purchaseTicket($ticketTypeID)
         return redirect()->back()->withInput()->with('error', 'Image upload failed.');
     }
 
+    // Check reference number uniqueness
+// Check reference number uniqueness
+$existingReference = $ticketpurchasesModel->where('Ref_Number', $refNumber)->first();
+if ($existingReference) {
+    // Reference number already exists, prompt the user to enter a different reference number
+    return redirect()->back()->withInput()->with('error', 'Reference number already exists. Please enter a different reference number.');
+}
+
+
     // Handle file upload
     if ($imageFile && $imageFile->isValid() && !$imageFile->hasMoved()) {
         $newName = $imageFile->getRandomName();
@@ -389,9 +442,6 @@ public function purchaseTicket($ticketTypeID)
 
     // Generate a random alphanumeric ticket ID with 9 digits
     $ticketID = $ticketType['TicketType'].'_'. substr(str_shuffle(str_repeat('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ', 9)), 0, 9);
-
-    // Create a new TicketPurchaseModel instance
-    $ticketPurchaseModel = new TicketPurchasesModel();
 
     // Prepare the ticket purchase data
     $ticketPurchaseData = [
@@ -458,6 +508,7 @@ public function purchaseTicket($ticketTypeID)
     // Redirect to a success page or display a success message
     return redirect()->to('/Event')->with('success', 'Ticket purchased successfully.');
 }
+
 
 
 
