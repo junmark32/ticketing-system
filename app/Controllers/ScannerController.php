@@ -51,10 +51,14 @@ class ScannerController extends BaseController
             // Check if the event associated with the ticket is still available
             $eventModel = new EventsModel();
             // Use array notation to access the properties
-            $event = $eventModel->find($ticketPurchase['EventID']); // Change $ticketPurchase->EventID to $ticketPurchase['EventID']
+            $event = $eventModel->find($ticketPurchase['EventID']); 
             if ($event) {
-                // Event exists, proceed with scanning
                 // Check if the status is 'Scanned' or 'Denied'
+                if ($ticketPurchase['Status'] === 'Scanned' || $ticketPurchase['Status'] === 'Denied') {
+                    return $this->response->setJSON(['message' => 'Sorry, this ticket is invalid.']);
+                }
+                // Update the status to 'Scanned'
+                $ticketPurchaseModel->update($ticketPurchase['PurchaseID'], ['Status' => 'Scanned']); // Use update method instead of save
 
                 return $this->response->setJSON([
                     'message' => 'QR code scanned successfully.',
@@ -74,7 +78,30 @@ class ScannerController extends BaseController
         // Ticket not found
         return $this->response->setStatusCode(404)->setJSON(['message' => 'Invalid QR code or ticket not found.']);
     }
-    
+    public function manualScan()
+    {
+        // Get the generated number from the input
+        $generatedNumber = $this->request->getVar('manualGeneratedNumber');
+
+        // Load models
+        $qrCodeModel = new QRcodeModel();
+        $ticketPurchaseModel = new TicketpurchasesModel();
+
+        // Search for the generated number in the QR codes table
+        $qrCode = $qrCodeModel->where('GeneratedNumber', $generatedNumber)->first();
+
+        if ($qrCode) {
+            // If a match is found, retrieve the PurchaseID
+            $purchaseId = $qrCode['PurchaseID'];
+
+            // Update the status in the ticket purchases table
+            $ticketPurchaseModel->update($purchaseId, ['Status' => 'Scanned']);
+
+            return json_encode(['success' => true, 'message' => 'QR Code scanned successfully.']);
+        } else {
+            return json_encode(['success' => false, 'message' => 'QR Code not found.']);
+        }
+    }
 
     
     

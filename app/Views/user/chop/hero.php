@@ -1,4 +1,4 @@
-<section class="hero-section set-bg" data-setbg="img/hero.jpg">
+<section class="hero-section set-bg" data-setbg="">
         <div class="container">
             <div class="row">
                 <div class="col-lg-7">
@@ -9,55 +9,18 @@
                     </div>
                 </div>
                 <div class="col-lg-5">
-                    <img src="img/hero-right.png" alt="">
+                    <img src="" alt="">
                 </div>
             </div>
         </div>
     </section>
-    <!-- Hero Section End -->
 
-    <!-- Counter Section Begin -->
-    <section class="counter-section bg-gradient">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="counter-text">
-                        <span>Event Date</span>
-                        <h3>Count Every Second <br />Until the next Event</h3>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="cd-timer" id="countdown">
-                        <div class="cd-item">
-                            <span>40</span>
-                            <p>Days</p>
-                        </div>
-                        <div class="cd-item">
-                            <span>18</span>
-                            <p>Hours</p>
-                        </div>
-                        <div class="cd-item">
-                            <span>46</span>
-                            <p>Minutes</p>
-                        </div>
-                        <div class="cd-item">
-                            <span>32</span>
-                            <p>Seconds</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Counter Section End -->
-
-    <!-- Home About Section Begin -->
     <section class="home-about-section spad">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="ha-pic">
-                        <img src="img/h-about.jpg" alt="">
+
                     </div>
                 </div>
                 <div class="col-lg-6">

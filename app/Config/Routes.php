@@ -6,7 +6,7 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('/', 'Home::index');
-$routes->get('/tickets/login', 'UserController::index');
+$routes->get('/login', 'UserController::index');
 $routes->get('/registerto', 'UserController::registerto');
 
 $routes->match(['post','get'],'/fn_login', 'UserController::fn_login');
@@ -42,3 +42,4 @@ $routes->match(['post', 'get'], '/admin/avail-tickets/declined/(:num)', 'AdminCo
 //scanner
 $routes->get('/scanner', 'ScannerController::index');
 $routes->post('validation', 'ScannerController::validateQRCode');
+$routes->post('manual-scan', 'ScannerController::manualScan');

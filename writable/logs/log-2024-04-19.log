@@ -1,0 +1,64 @@
+CRITICAL - 2024-04-19 12:12:45 --> Undefined array key "PurchaseID"
+in APPPATH\Controllers\ScannerController.php on line 58.
+ 1 APPPATH\Controllers\ScannerController.php(58): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "PurchaseID"', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\ScannerController.php', 58)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\ScannerController->validateQRCode()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ScannerController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-19 12:13:13 --> Undefined array key "Status"
+in APPPATH\Controllers\ScannerController.php on line 58.
+ 1 APPPATH\Controllers\ScannerController.php(58): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "Status"', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\ScannerController.php', 58)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\ScannerController->validateQRCode()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ScannerController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-19 12:13:53 --> Undefined array key "Status"
+in APPPATH\Controllers\ScannerController.php on line 58.
+ 1 APPPATH\Controllers\ScannerController.php(58): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "Status"', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\ScannerController.php', 58)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\ScannerController->validateQRCode()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ScannerController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-19 12:17:15 --> Undefined array key "PurchaseID"
+in APPPATH\Controllers\ScannerController.php on line 61.
+ 1 APPPATH\Controllers\ScannerController.php(61): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "PurchaseID"', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\ScannerController.php', 61)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\ScannerController->validateQRCode()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ScannerController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-19 12:18:33 --> Undefined array key "Status"
+in APPPATH\Controllers\ScannerController.php on line 58.
+ 1 APPPATH\Controllers\ScannerController.php(58): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "Status"', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\ScannerController.php', 58)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\ScannerController->validateQRCode()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ScannerController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-19 12:19:55 --> Undefined array key "PurchaseID"
+in APPPATH\Controllers\ScannerController.php on line 60.
+ 1 APPPATH\Controllers\ScannerController.php(60): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "PurchaseID"', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\ScannerController.php', 60)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\ScannerController->validateQRCode()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ScannerController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-19 12:21:49 --> Undefined array key "Status"
+in APPPATH\Controllers\ScannerController.php on line 58.
+ 1 APPPATH\Controllers\ScannerController.php(58): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "Status"', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\ScannerController.php', 58)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\ScannerController->validateQRCode()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ScannerController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')
+CRITICAL - 2024-04-19 12:41:04 --> Undefined array key "Status"
+in APPPATH\Controllers\ScannerController.php on line 58.
+ 1 APPPATH\Controllers\ScannerController.php(58): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "Status"', 'C:\\laragon\\www\\ticketing-system\\app\\Controllers\\ScannerController.php', 58)
+ 2 SYSTEMPATH\CodeIgniter.php(942): App\Controllers\ScannerController->validateQRCode()
+ 3 SYSTEMPATH\CodeIgniter.php(502): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ScannerController))
+ 4 SYSTEMPATH\CodeIgniter.php(361): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 FCPATH\index.php(79): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Commands\Server\rewrite.php(47): require_once('C:\\laragon\\www\\ticketing-system\\public\\index.php')

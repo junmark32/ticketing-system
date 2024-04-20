@@ -461,7 +461,7 @@ if ($existingReference) {
     ];
 
     // Insert the ticket purchase data into the database
-    $ticketPurchaseModel->insert($ticketPurchaseData);
+    $ticketpurchasesModel->insert($ticketPurchaseData);
 
     // Update the ticket quantity
     $newQuantity = $ticketType['Quantity'] - 1;
