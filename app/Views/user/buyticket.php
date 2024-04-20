@@ -95,22 +95,23 @@
             <div class="card-body">
                 <form action="<?= base_url('events/ticket/purchase/') . $ticketTypeID ?>" method="POST" enctype="multipart/form-data">
                 
-                    <div class="mb-3">
-                        <label for="first_name" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="first_name" name="first_name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="last_name" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="last_name" name="last_name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="phone" class="form-label">Phone</label>
-                        <input type="tel" class="form-control" id="phone" name="phone" required>
-                    </div>
+                <div class="mb-3">
+    <label for="first_name" class="form-label">First Name</label>
+    <input type="text" class="form-control" id="first_name" name="first_name" value="<?= session()->get('user_data')['FirstName'] ?? '' ?>" required>
+</div>
+<div class="mb-3">
+    <label for="last_name" class="form-label">Last Name</label>
+    <input type="text" class="form-control" id="last_name" name="last_name" value="<?= session()->get('user_data')['LastName'] ?? '' ?>" required>
+</div>
+<div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input type="email" class="form-control" id="email" name="email" value="<?= session()->get('user_data')['Email'] ?? '' ?>" required>
+</div>
+<div class="mb-3">
+    <label for="phone" class="form-label">Phone</label>
+    <input type="tel" class="form-control" id="phone" name="phone" value="<?= session()->get('user_data')['Phone'] ?? '' ?>" required>
+</div>
+
                     <div class="mb-3">
                         <label for="reference" class="form-label">Gcash Reference Number</label>
                         <input type="text" class="form-control" id="reference" name="reference" required>

@@ -170,6 +170,10 @@ class UserController extends BaseController
                     'UserID' => $user['UserID'],
                     'Username' => $user['Username'],
                     'UserType' => $user['UserType'],
+                    'FirstName' => $user['FirstName'],
+                    'LastName'=> $user['LastName'],
+                    'Email' => $user['Email'],
+                    'Phone' => $user['Phone'],
                     // Add more user data as needed
                 ];
     
